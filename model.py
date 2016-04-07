@@ -18,7 +18,7 @@ class model:
 			if len(i)<order:
 				continue
 
-			init_tuple=tuple([i[x] for x in xrange(1,order)])
+			init_tuple=tuple([i[x].lower() for x in xrange(1,order)])
 			#print init_tuple
 			try:
 				self.states['{{start}}'][init_tuple]=self.states['{{start}}'][init_tuple]+1
@@ -28,8 +28,8 @@ class model:
 				self.states['{{start}}']['total']+=1
 
 			for j in xrange(1,len(i)-order+1):
-				temp_tuple=tuple([i[x] for x in xrange(j,j+order-1)])
-				temp_tuple_2=tuple([i[x] for x in xrange(j+1,j+order)])
+				temp_tuple=tuple([i[x].lower() for x in xrange(j,j+order-1)])
+				temp_tuple_2=tuple([i[x].lower() for x in xrange(j+1,j+order)])
 				try:
 					temp=self.states[temp_tuple]
 					try:
@@ -74,16 +74,29 @@ class model:
 			
 	
 	def generateSentence(self):
-		sentence = ""
+		sentence = []
 		count = 0		
 		next_state = '{{start}}'
 		while next_state != ('{{end}}',):
-			print next_state
-			sentence = sentence + str(next_state) + " "
-			next_state = self.inverseTransform(self.states[next_state])
+			#print next_state
+			if(next_state!='{{start}}'):
+
+				sentence = sentence+list(next_state)
+			try:
+				next_state = self.inverseTransform(self.states[next_state])
+			except:
+				break
 		return sentence
+	
+	def printSentence(self,sentence):
+		printSent=""
+		for i in xrange(0,len(sentence),2):
+			printSent=printSent+" "+sentence[i]
+		printSent.strip('None')
+		return printSent
+
 
 if __name__=='__main__':
 	m=model()
-	m.generate_model(4,'')
-	print m.generateSentence()
+	m.generate_model(3,'data_cleaned.txt')
+	print m.printSentence(m.generateSentence())
