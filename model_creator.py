@@ -26,6 +26,8 @@ class token_generator:
 		list_sentences = []
 		temp = []
 		for j in f:
+			if j.strip()=="":
+				continue
 			tokens2 = nltk.word_tokenize(j.strip())	
 			tokens = []
 			for i in tokens2:
@@ -47,7 +49,8 @@ class token_generator:
 					pass
 				else:
 					tokens.append(i)
-			temp = temp + tokens	
+			temp = temp + tokens
+				
 			if tokens[-1] in [".", "?", "!"]:
 				temp = temp + ["{{end}}"]
 				list_sentences.append(temp)
