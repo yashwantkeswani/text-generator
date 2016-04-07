@@ -80,7 +80,6 @@ class model:
 		while next_state != ('{{end}}',):
 			#print next_state
 			if(next_state!='{{start}}'):
-
 				sentence = sentence+list(next_state)
 			try:
 				next_state = self.inverseTransform(self.states[next_state])
@@ -88,9 +87,10 @@ class model:
 				break
 		return sentence
 	
-	def printSentence(self,sentence):
+	def printSentence(self,sentence,order):
+		#print sentence
 		printSent=""
-		for i in xrange(0,len(sentence),2):
+		for i in xrange(0,len(sentence),order-1):
 			printSent=printSent+" "+sentence[i]
 		printSent.strip('None')
 		return printSent
@@ -98,5 +98,5 @@ class model:
 
 if __name__=='__main__':
 	m=model()
-	m.generate_model(3,'data_cleaned.txt')
-	print m.printSentence(m.generateSentence())
+	m.generate_model(4,'data_cleaned.txt')
+	print m.printSentence(m.generateSentence(),4)
