@@ -31,6 +31,16 @@ for j in f:
 			tokens.append(i+'n')
 		elif i.lower() == "n't":
 			tokens.append("not")
+		elif i.lower() == "'re":
+			tokens.append("are")
+		elif i.lower() == "'ve":
+			tokens.append("have")
+		elif i.lower() == "'ll":
+			tokens.append("will")
+		elif i.lower() =="'m":
+			tokens.append("am")
+		elif i.lower() in ['(',')']:
+			pass
 		else:
 			tokens.append(i)
 	temp = temp + tokens	
