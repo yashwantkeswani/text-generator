@@ -1,5 +1,6 @@
 import nltk
 import re
+import codecs
 
 class token_generator:
 
@@ -21,7 +22,7 @@ class token_generator:
 
 
 	def generate(self,filename):
-		f = open(filename, "r").readlines()
+		f = codecs.open(filename,'r',encoding='utf8').readlines()
 
 		list_sentences = []
 		temp = []

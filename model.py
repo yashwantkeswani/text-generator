@@ -98,5 +98,5 @@ class model:
 
 if __name__=='__main__':
 	m=model()
-	m.generate_model(4,'data_cleaned.txt')
-	print m.printSentence(m.generateSentence(),4)
+	m.generate_model(3,'pg2600.txt')
+	print m.printSentence(m.generateSentence(),3)
