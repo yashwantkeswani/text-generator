@@ -21,7 +21,7 @@ class model:
 			tokens=f.read().split('\n')
 			for i in xrange(0,len(tokens)):
 				tokens[i]=list(tokens[i])
-			
+		
 		self.states={'{{start}}':{'total':0},'{{end}}':{'total':0},'total':{'{{end}}'}}
 		#print tokens
 		#print len(tokens)
@@ -86,11 +86,14 @@ class model:
 		
 			
 	
-	def generateSentence(self):
+	def generateSentence(self,order,length):
 		sentence = []
 		count = 0		
 		next_state = '{{start}}'
 		while next_state != '{{end}}':
+			#print sentence
+			if(len(sentence)>=length*order):
+				break
 			#print next_state
 			if(next_state!='{{start}}'):
 				sentence = sentence+list(next_state)
@@ -99,9 +102,14 @@ class model:
 				while next_state[0]==',':
 					next_state = self.inverseTransform(self.states[next_state])
 			except Exception as e :
-				print "exception"
-				print e
+				
+				if(len(sentence)<=length*order):
+					next_state='{{start}}'
+					continue
+				#print e
 				break
+			if(next_state=='{{end}}' and len(sentence)<=length*order):
+				next_state='{{start}}'
 		#print sentence
 		return sentence
 	
@@ -118,8 +126,8 @@ class model:
 
 if __name__=='__main__':
 	m=model()
-	order=10
-	flag=0 # 0 for alphabets 1 for words
-	datafile='pg2600.txt'
+	order=4
+	flag=1 # 0 for alphabets 1 for words
+	datafile='data_cleaned.txt'
 	m.generate_model(order,datafile,flag)
-	print m.printSentence(m.generateSentence(),order,flag)
+	print m.printSentence(m.generateSentence(50,order),order,flag)
