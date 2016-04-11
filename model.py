@@ -1,6 +1,7 @@
 from model_creator import token_generator
 import random
 from operator import itemgetter
+import sys
 
 class model:
 	def __init__(self):
@@ -53,7 +54,6 @@ class model:
 				self.states[end_tuple]={'total':0}
 				self.states[end_tuple]['{{end}}'] = 1;
 				self.states[end_tuple]['total'] += 1;
-		import sys
 		
 		return self.states
 
@@ -93,18 +93,16 @@ class model:
 		
 		printSent=""
 		for i in xrange(0,len(sentence),order-1):
-			print sentence[i]
 			if(sentence[i]==',' or sentence[i]=='.'):
 				printSent=printSent+sentence[i]
 			else:
 				printSent=printSent+" "+sentence[i]
-		printSent.strip('None')
-		return printSent
+		return printSent.strip('None').strip()
 
 
 if __name__=='__main__':
 	m=model()
 	order=4
-	datafile='pg2600.txt'
+	datafile='shakespeare.txt'
 	m.generate_model(order,datafile)
 	print m.printSentence(m.generateSentence(),order)
