@@ -10,11 +10,22 @@ class model:
 		self.states = {'{{start}}':{'total':0}}
 
 	
-	def generate_model(self,order,filename):
-		tokens=self.t.generate(filename)
-		self.states={'{{start}}':{'total':0}}
+		
+
+
+	def generate_model(self,order,filename,flag):
+		if(flag==1):
+			tokens=self.t.generate(filename)
+		else:
+			f=open(filename,'r')
+			tokens=f.read().split('\n')
+			for i in xrange(0,len(tokens)):
+				tokens[i]=list(tokens[i])
+			
+		self.states={'{{start}}':{'total':0},'{{end}}':{'total':0},'total':{'{{end}}'}}
 		#print tokens
 		#print len(tokens)
+
 		for i in tokens:
 
 			if len(i)<order:
@@ -54,7 +65,7 @@ class model:
 				self.states[end_tuple]={'total':0}
 				self.states[end_tuple]['{{end}}'] = 1;
 				self.states[end_tuple]['total'] += 1;
-		
+		#print self.states
 		return self.states
 
 	def inverseTransform(self, probable_states):
@@ -67,7 +78,7 @@ class model:
 		temp = 0
 		for i in sorted_probable_states:
 			temp = temp + float(sorted_probable_states[i])/float(outlinks)
-			if i=='total' or i == None:
+			if i=='total' or i == None :
 				continue		
 			if U<temp:
 				return i
@@ -79,33 +90,36 @@ class model:
 		sentence = []
 		count = 0		
 		next_state = '{{start}}'
-		while next_state != ('{{end}}',):
+		while next_state != '{{end}}':
 			#print next_state
 			if(next_state!='{{start}}'):
 				sentence = sentence+list(next_state)
 			try:
 				next_state = self.inverseTransform(self.states[next_state])
-			except:
+				while next_state[0]==',':
+					next_state = self.inverseTransform(self.states[next_state])
+			except Exception as e :
+				print "exception"
+				print e
 				break
+		#print sentence
 		return sentence
 	
-	def printSentence(self,sentence,order):
+	def printSentence(self,sentence,order,flag):
 		
 		printSent=""
 		for i in xrange(0,len(sentence),order-1):
-			if(sentence[i]==',' or sentence[i]=='.'):
+			if(sentence[i]==',' or sentence[i]=='.' or flag==0):
 				printSent=printSent+sentence[i]
 			else:
 				printSent=printSent+" "+sentence[i]
-		try:
-			return printSent.strip('None').strip().split("{")[0].strip()
-		except:
-			return printSent.strip('None').strip()
+		return printSent.strip(r'{.*').lstrip()
 
 
 if __name__=='__main__':
 	m=model()
-	order=4
-	datafile='shakespeare.txt'
-	m.generate_model(order,datafile)
-	print m.printSentence(m.generateSentence(),order)
+	order=10
+	flag=0 # 0 for alphabets 1 for words
+	datafile='pg2600.txt'
+	m.generate_model(order,datafile,flag)
+	print m.printSentence(m.generateSentence(),order,flag)
