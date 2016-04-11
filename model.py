@@ -12,7 +12,8 @@ class model:
 	def generate_model(self,order,filename):
 		tokens=self.t.generate(filename)
 		self.states={'{{start}}':{'total':0}}
-
+		#print tokens
+		#print len(tokens)
 		for i in tokens:
 
 			if len(i)<order:
@@ -44,7 +45,7 @@ class model:
 					self.states[temp_tuple]['total']+=1
 			
 
-			end_tuple = tuple([i[x] for x in xrange(j-order+1,len(i))])
+			end_tuple = tuple([i[x] for x in xrange(len(i)-order+1,len(i))])
 			try:
 				self.states[end_tuple]['{{end}}'] += 1;
 				self.states[end_tuple]['total'] += 1;
@@ -52,7 +53,8 @@ class model:
 				self.states[end_tuple]={'total':0}
 				self.states[end_tuple]['{{end}}'] = 1;
 				self.states[end_tuple]['total'] += 1;
-						
+		import sys
+		
 		return self.states
 
 	def inverseTransform(self, probable_states):
@@ -88,15 +90,21 @@ class model:
 		return sentence
 	
 	def printSentence(self,sentence,order):
-		#print sentence
+		
 		printSent=""
 		for i in xrange(0,len(sentence),order-1):
-			printSent=printSent+" "+sentence[i]
+			print sentence[i]
+			if(sentence[i]==',' or sentence[i]=='.'):
+				printSent=printSent+sentence[i]
+			else:
+				printSent=printSent+" "+sentence[i]
 		printSent.strip('None')
 		return printSent
 
 
 if __name__=='__main__':
 	m=model()
-	m.generate_model(3,'pg2600.txt')
-	print m.printSentence(m.generateSentence(),3)
+	order=4
+	datafile='pg2600.txt'
+	m.generate_model(order,datafile)
+	print m.printSentence(m.generateSentence(),order)
