@@ -121,7 +121,7 @@ class model:
 				printSent=printSent+sentence[i]
 			else:
 				printSent=printSent+" "+sentence[i]
-		return printSent.strip(r'{.*').lstrip()
+		return str(unicode(printSent.strip(r'{.*').lstrip()).encode('utf-8'))
 
 
 if __name__=='__main__':
