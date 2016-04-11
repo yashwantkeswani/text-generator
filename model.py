@@ -97,7 +97,10 @@ class model:
 				printSent=printSent+sentence[i]
 			else:
 				printSent=printSent+" "+sentence[i]
-		return printSent.strip('None').strip()
+		try:
+			return printSent.strip('None').strip().split("{")[0].strip()
+		except:
+			return printSent.strip('None').strip()
 
 
 if __name__=='__main__':
