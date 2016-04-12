@@ -9,7 +9,8 @@ class model:
 		random.seed()	
 		self.states = {'{{start}}':{'total':0}}
 
-	
+	def return_states(self):
+		return self.states	
 		
 
 
@@ -17,6 +18,7 @@ class model:
 		if(flag==1):
 			tokens=self.t.generate(filename)
 		else:
+			print filename
 			f=open(filename,'r')
 			tokens=f.read().split('\n')
 			for i in xrange(0,len(tokens)):
